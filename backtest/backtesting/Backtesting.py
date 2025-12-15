@@ -106,20 +106,24 @@ class Backtesting:
             for strategy in self.strategy
         ]
 
-        if np.abs(sum(signals)) < self.config.min_signals:
+        # Sum signals first before validation to preserve duplicate signals
+        signals_sum = sum(signals)
+        
+        if np.abs(signals_sum) < self.config.min_signals:
             return 0
         
-        # Validate conflicted signals
-        signals = set(signals)
-        # print(sum(signals))
-        signals = sum(signals)
+        # Validate conflicted signals - check if both positive and negative signals exist
+        signals_set = set(signals)
+        if len(signals_set) > 1 and 0 not in signals_set:
+            # Conflicting signals (both buy and sell), return 0
+            return 0
 
         if self.config.side == 'long':
-            return 1 if signals > 0 else 0
+            return 1 if signals_sum > 0 else 0
         elif self.config.side == 'short':
-            return -1 if signals < 0 else 0
+            return -1 if signals_sum < 0 else 0
         else:
-            return signals
+            return 1 if signals_sum > 0 else (-1 if signals_sum < 0 else 0)
 
     def run_backtest(self, name=''):
         """
@@ -143,8 +147,9 @@ class Backtesting:
                 datetime = datetimes[i]
                 time = times[i]
                 curr_price = prices[i]
-                bid_price = bid_prices[i + 1] if i + 1 < data_len else bid_prices[i]
-                ask_price = ask_prices[i + 1] if i + 1 < data_len else ask_prices[i]
+                # Use current prices for order execution, not future prices
+                bid_price = bid_prices[i]
+                ask_price = ask_prices[i]
 
                 if self.config.position_size != 1:
                     self.position_size = self.portfolio.position_sizing(curr_price)
