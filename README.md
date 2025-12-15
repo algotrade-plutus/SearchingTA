@@ -170,7 +170,7 @@ python3 -m long
 All the result stored in `./result_short`****
 
 ```python
-python3 -m long
+python3 -m short
 ```
 
 To get the metrics, run all in `visualize.ipynb`

@@ -194,8 +194,8 @@ class Optimizer:
         if len(history) == 0:
             return float('-inf')
 
-        balance = self.bt.data['balance'].fillna(method='ffill')
-        equity = self.bt.data['equity'].fillna(method='ffill')
+        balance = self.bt.data['balance'].ffill()
+        equity = self.bt.data['equity'].ffill()
 
         # print('balance', balance)
         # print('equity', equity)
