@@ -130,8 +130,8 @@ class Backtesting:
         # Extract data as NumPy arrays to speed up access
         data_len = len(self.data)
         prices = self.data["price"].values
-        bid_prices = self.data["bid_price"].fillna(method="bfill").values
-        ask_prices = self.data["ask_price"].fillna(method="bfill").values
+        bid_prices = self.data["bid_price"].bfill().values
+        ask_prices = self.data["ask_price"].bfill().values
         datetimes = self.data.index
         times = datetimes.time  # Extract time separately
 

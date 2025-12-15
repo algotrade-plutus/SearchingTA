@@ -43,8 +43,8 @@ def MACD(df) -> int:
     prev_histogram = df['macd_hist'].iloc[-2]
 
     # Signal 
-    histogram_cross = (histogram > 0 and prev_histogram < 0).astype(int)
-    histogram_cross_down = (histogram < 0 and prev_histogram > 0).astype(int)
+    histogram_cross = ((histogram > 0) & (prev_histogram < 0)).astype(int)
+    histogram_cross_down = ((histogram < 0) & (prev_histogram > 0)).astype(int)
 
     return histogram_cross - histogram_cross_down
 
@@ -57,8 +57,8 @@ def VWAP(df) -> int:
     prev_close = df['close'].iloc[-2]
 
     # Signal
-    vwap_cross = (close > vwap and prev_close < prev_vwap).astype(int)
-    vwap_cross_down = (close < vwap and prev_close > prev_vwap).astype(int)
+    vwap_cross = ((close > vwap) & (prev_close < prev_vwap)).astype(int)
+    vwap_cross_down = ((close < vwap) & (prev_close > prev_vwap)).astype(int)
 
     return vwap_cross - vwap_cross_down
 
@@ -115,8 +115,8 @@ def PPO(df) -> int:
     prev_ppo = df['ppo'].iloc[-2]
 
     # Signal
-    long = (ppo > 0 and prev_ppo < 0).astype(int)
-    short = (ppo < 0 and prev_ppo > 0).astype(int)
+    long = ((ppo > 0) & (prev_ppo < 0)).astype(int)
+    short = ((ppo < 0) & (prev_ppo > 0)).astype(int)
     
     return long - short
 
@@ -239,8 +239,8 @@ def Volume_MA(df) -> int:
     prev_volume_ma10 = df['volume_ma10'].iloc[-2]
     
     # Signal
-    volume_ma5_cross = (volume_ma5 > volume_ma10 and prev_volume_ma5 < prev_volume_ma10).astype(int)
-    volume_ma5_cross_down = (volume_ma5 < volume_ma10 and prev_volume_ma5 > prev_volume_ma10).astype(int)
+    volume_ma5_cross = ((volume_ma5 > volume_ma10) & (prev_volume_ma5 < prev_volume_ma10)).astype(int)
+    volume_ma5_cross_down = ((volume_ma5 < volume_ma10) & (prev_volume_ma5 > prev_volume_ma10)).astype(int)
     
     return volume_ma5_cross - volume_ma5_cross_down
 
@@ -347,8 +347,8 @@ def FI(df) -> int:
     prev_fi = df['force_index'].iloc[-2]
 
     # Signal
-    fi_cross = (fi > 0 and prev_fi < 0).astype(int)
-    fi_cross_down = (fi < 0 and prev_fi > 0).astype(int)
+    fi_cross = ((fi > 0) & (prev_fi < 0)).astype(int)
+    fi_cross_down = ((fi < 0) & (prev_fi > 0)).astype(int)
 
     return fi_cross - fi_cross_down
 

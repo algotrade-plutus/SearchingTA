@@ -36,7 +36,6 @@ class BacktestConfig:
         self.max_pos = max_pos
         self.position_size = position_size
         self.margin = margin
-        self.min_signals = 2
         self.mode = mode
         self.side = side
         self.min_signals = min_signals
