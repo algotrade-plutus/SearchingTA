@@ -106,20 +106,18 @@ class Backtesting:
             for strategy in self.strategy
         ]
 
-        if np.abs(sum(signals)) < self.config.min_signals:
-            return 0
+        # Sum the signals
+        total_signals = sum(signals)
         
-        # Validate conflicted signals
-        signals = set(signals)
-        # print(sum(signals))
-        signals = sum(signals)
+        if np.abs(total_signals) < self.config.min_signals:
+            return 0
 
         if self.config.side == 'long':
-            return 1 if signals > 0 else 0
+            return 1 if total_signals > 0 else 0
         elif self.config.side == 'short':
-            return -1 if signals < 0 else 0
+            return -1 if total_signals < 0 else 0
         else:
-            return signals
+            return total_signals
 
     def run_backtest(self, name=''):
         """
