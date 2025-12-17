@@ -77,14 +77,15 @@ class Backtesting:
                 (row["signal"] == 1 and ask_price >= row["price"]) or 
                 (row["signal"] == -1 and bid_price <= row["price"])
                 ):
+                entry_price = ask_price if row["signal"] == 1 else bid_price
                 self.portfolio.add_position({
                     "date": date,
-                    "price": curr_price,
+                    "price": entry_price,
                     "signal": "buy" if row["signal"] == 1 else "sell",
                     "position_size": self.position_size,
-                    "position": curr_price * self.config.margin * self.position_size,
-                    "TP": curr_price + self.config.TP if row["signal"] == 1 else curr_price - self.config.TP,
-                    "SL": curr_price - self.config.SL if row["signal"] == 1 else curr_price + self.config.SL,
+                    "position": entry_price * self.config.margin * self.position_size,
+                    "TP": entry_price + self.config.TP if row["signal"] == 1 else entry_price - self.config.TP,
+                    "SL": entry_price - self.config.SL if row["signal"] == 1 else entry_price + self.config.SL,
                     "close_price": np.nan,
                     "close_time": np.nan,
                     "pnl": np.nan
