@@ -77,14 +77,15 @@ class Backtesting:
                 (row["signal"] == 1 and ask_price >= row["price"]) or 
                 (row["signal"] == -1 and bid_price <= row["price"])
                 ):
+                entry_price = ask_price if row["signal"] == 1 else bid_price
                 self.portfolio.add_position({
                     "date": date,
-                    "price": curr_price,
+                    "price": entry_price,
                     "signal": "buy" if row["signal"] == 1 else "sell",
                     "position_size": self.position_size,
-                    "position": curr_price * self.config.margin * self.position_size,
-                    "TP": curr_price + self.config.TP if row["signal"] == 1 else curr_price - self.config.TP,
-                    "SL": curr_price - self.config.SL if row["signal"] == 1 else curr_price + self.config.SL,
+                    "position": entry_price * self.config.margin * self.position_size,
+                    "TP": entry_price + self.config.TP if row["signal"] == 1 else entry_price - self.config.TP,
+                    "SL": entry_price - self.config.SL if row["signal"] == 1 else entry_price + self.config.SL,
                     "close_price": np.nan,
                     "close_time": np.nan,
                     "pnl": np.nan
@@ -106,20 +107,18 @@ class Backtesting:
             for strategy in self.strategy
         ]
 
-        if np.abs(sum(signals)) < self.config.min_signals:
-            return 0
+        # Sum the signals
+        total_signals = sum(signals)
         
-        # Validate conflicted signals
-        signals = set(signals)
-        # print(sum(signals))
-        signals = sum(signals)
+        if np.abs(total_signals) < self.config.min_signals:
+            return 0
 
         if self.config.side == 'long':
-            return 1 if signals > 0 else 0
+            return 1 if total_signals > 0 else 0
         elif self.config.side == 'short':
-            return -1 if signals < 0 else 0
+            return -1 if total_signals < 0 else 0
         else:
-            return signals
+            return total_signals
 
     def run_backtest(self, name=''):
         """
@@ -182,7 +181,7 @@ class Backtesting:
 
         # Apply batch updates to the DataFrame **after** the loop
         for x in balance_updates:
-            self.data.loc[x[0]:, "balance"] = x[1]
+            self.data.loc[x[0], "balance"] = x[1]
         
         for x in equity_updates:
-            self.data.loc[x[0]:, "equity"] = x[1]
+            self.data.loc[x[0], "equity"] = x[1]
