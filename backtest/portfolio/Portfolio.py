@@ -98,11 +98,11 @@ class Portfolio:
             row["pnl"] = self._calculate_pnl(row, bid_price, ask_price)
             
             # print(self.balance)
-            self.balance += row["pnl"] - self.config.cost * 2
+            self.balance += row["pnl"]
             # print(self.balance)
             
             row["close_time"] = date
-            pnl += row["pnl"] - self.config.cost * 2
+            pnl += row["pnl"]
             self.history = pd.concat([self.history, pd.DataFrame([row])], ignore_index=True)
 
         self.holdings = pd.DataFrame(columns=[

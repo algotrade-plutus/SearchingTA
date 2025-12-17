@@ -182,7 +182,7 @@ class Backtesting:
 
         # Apply batch updates to the DataFrame **after** the loop
         for x in balance_updates:
-            self.data.loc[x[0]:, "balance"] = x[1]
+            self.data.loc[x[0], "balance"] = x[1]
         
         for x in equity_updates:
-            self.data.loc[x[0]:, "equity"] = x[1]
+            self.data.loc[x[0], "equity"] = x[1]
